@@ -1,6 +1,4 @@
-
-
-class AUAction:
+class Action:
     def __init__(self, alfa: float = 0.1, lambd: float = 0.1, actor_only: bool = True,
                  epsilon: float = 0.1):
         """
@@ -43,6 +41,8 @@ class AUAction:
         Thalamic output
         :param kn:
             between 0 and 1
+        :param da:
+            dopamine. 0.5 is a baseline
         :return:
         """
         return da * self._g - (1 - kn * da) * self._n
