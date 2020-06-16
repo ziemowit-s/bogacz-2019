@@ -1,6 +1,6 @@
 class Action:
     def __init__(self, alfa: float = 0.1, lambd: float = 0.1, actor_only: bool = True,
-                 epsilon: float = 0.1):
+                 epsilon: float = 0.1, g_init: float = 0, n_init: float = 0):
         """
         Actor Uncertainty action
         :param alfa:
@@ -12,29 +12,28 @@ class Action:
         self._epsilon = epsilon
         self.actor_only = actor_only
 
-        self._g = 0
-        self._n = 0
-        self._delta = 0
+        self._g = g_init
+        self._n = n_init
 
-    def g(self, r):
-        self._g = self._alfa * self.f() - self._lambd * self._g
+    def g(self, delta):
+        self._g = self._alfa * self.f(delta) - self._lambd * self._g
 
-    def n(self, r):
-        self._n = self._alfa * self.f() - self._lambd * self._n
+    def n(self, delta):
+        self._n = self._alfa * self.f(-delta) - self._lambd * self._n
 
     def delta(self, r):
-        self._delta = r - 0.5 * (self._g - self._n)
+        return r - 0.5 * (self._g - self._n)
 
-    def f(self):
-        if self._delta > 0:
-            return self._delta
+    def f(self, delta):
+        if delta > 0:
+            return delta
         else:
-            return self._delta * self._epsilon
+            return delta * self._epsilon
 
     def reward(self, r):
-        self.g(r)
-        self.n(r)
-        self.delta(r)
+        delta = self.delta(r)
+        self.g(delta)
+        self.n(delta)
 
     def act(self, kn: float = 1.0, da: float = 0.5):
         """

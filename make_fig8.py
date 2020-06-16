@@ -3,34 +3,80 @@ import numpy as np
 from model.model import Model
 
 
-def train(model, n):
+def make_model():
+    # At the start ofeach simulation, the weights were initialized to:
+    # Gpellet = Npellet = Gchow = Nchow = 0.1
+    model = Model(num_of_states=1, num_of_actions=2, actor_only=ACTOR_ONLY,
+                  alfa=0.1, epsilon=0.6327, lambd=0.0204,
+                  g_init=0.1, n_init=0.1)
+
+    return model
+
+
+def act(model, n, p_pelet, n_pelet, p_chow=1, n_chow=0, kn: float = 1, da=0.5, train=True, sigma=None):
+    chow_choose = 0
+    pellet_choose = 0
+
     for _ in range(n):
-        # Control
-        actions = model.act(state=0, kn=1, da=0.5, raw=True)
-        act = np.argmax(actions)
+        t = model.act(state=0, kn=kn, da=da, sigma=sigma)
 
-        # Depleted
-        actions = model.act(state=0, kn=0.7507, da=0.5, raw=True)
-        act = np.argmax(actions)
+        # if no move choose
+        if t is None:
+            continue
+
+        # pellet
+        if t == 0:
+            pellet_choose += 1
+            if train:
+                # lewer push - cost
+                model.reward(reward=n_pelet, state=0, action=0)
+                # pellet obtained - payoff
+                model.reward(reward=p_pelet, state=0, action=0)
+
+        # chow
+        else:
+            chow_choose += 1
+            if train:
+                # chow cost (default 0)
+                model.reward(reward=n_chow, state=0, action=1)
+                # chow payoff (default 1)
+                model.reward(reward=p_chow, state=0, action=1)
+
+    return pellet_choose, chow_choose
 
 
-def test(model, n):
-    control = 0
-    depleted = 0
-    for _ in range(n):
+def compute():
+    control_model = make_model()
+    depleted_model = make_model()
 
-        # Control
-        actions = model.act(state=0, kn=1, da=0.5, raw=True)
-        act = np.argmax(actions)
-        if act == 0:
-            control += 1
+    ct_pellets = []
+    ct_chows = []
 
-        # Depleted
-        actions = model.act(state=0, kn=0.7507, da=0.5, raw=True)
-        act = np.argmax(actions)
-        if act == 1:
-            depleted += 1
-    return control, depleted
+    dp_pellets = []
+    dp_chows = []
+
+    # 6 rats was simulated.
+    for rat_num in range(6):
+
+        # Each simulation consisted of 180 training
+        act(control_model,  p_pelet=P_PELET, n_pelet=N_PELET, n=180, kn=1, da=0.5, sigma=SIGMA)
+        act(depleted_model, p_pelet=P_PELET, n_pelet=N_PELET, n=180, kn=KN_BLOCK, da=0.5, sigma=SIGMA)
+
+        # 180 testing trials
+        ct_pellet, ct_chow = act(control_model,  p_pelet=P_PELET, sigma=SIGMA, n_pelet=N_PELET, n=180, kn=1,
+                                 da=0.5, train=False)
+        dp_pellet, dp_chow = act(depleted_model, p_pelet=P_PELET, sigma=SIGMA, n_pelet=N_PELET, n=180, kn=KN_BLOCK,
+                                 da=0.5, train=False)
+
+        ct_pellets.append(ct_pellet)
+        ct_chows.append(ct_chow)
+        dp_pellets.append(dp_pellet)
+        dp_chows.append(dp_chow)
+
+    print("CONTROL:")
+    print("pellet:", round(np.average(ct_pellets), 4), "chow:", round(np.average(ct_chows), 4))
+    print("DEPLETED D2:")
+    print("pellet:", round(np.average(dp_pellets), 4), "chow:", round(np.average(dp_chows), 4))
 
 
 """
@@ -38,21 +84,15 @@ Train Actor Uncertainty Model with detrministic reward.
 """
 if __name__ == '__main__':
     ACTOR_ONLY = True
+    P_PELET = 15.511751
+    SIGMA = 1.066246
+    KN_BLOCK = 0.7507  # corresponding to blocking ofD2 receptors with an efficiency ofroughly 25%
 
-    model = Model(num_of_states=1, num_of_actions=2, actor_only=ACTOR_ONLY,
-                  alfa=0.1, epsilon=0.6327, lambd=0.0204)
+    print("No pellet cost")
+    N_PELET = 0
+    compute()
 
-    pellet_action = model.states[0].actions[0]
-    chow_action = model.states[0].actions[1]
-
-    pellet_action._g = 0.1
-    pellet_action._n = 0.1
-
-    chow_action._g = 0.1
-    chow_action._n = 0.1
-
-    for rat_num in range(6):
-        train(model, n=180)
-        control, depleted = test(model, n=180)
-        print(control, depleted)
-
+    print()
+    print("Pellet cost")
+    N_PELET = 14.510517
+    compute()
