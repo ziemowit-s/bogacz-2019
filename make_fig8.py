@@ -13,7 +13,19 @@ def make_model():
     return model
 
 
-def act(model, n, p_pelet, n_pelet, p_chow=1, n_chow=0, kn: float = 1, da=0.5, train=True, sigma=None):
+def train(model, n, p_pelet, n_pelet, p_chow=1, n_chow=0):
+    for _ in range(n):
+        # lewer push - cost
+        model.reward(reward=n_pelet, state=0, action=0)
+        # pellet obtained - payoff
+        model.reward(reward=p_pelet, state=0, action=0)
+        # chow cost (default 0)
+        model.reward(reward=n_chow, state=0, action=1)
+        # chow payoff (default 1)
+        model.reward(reward=p_chow, state=0, action=1)
+
+
+def test(model, n, p_pelet, n_pelet, p_chow=1, n_chow=0, kn: float = 1, da=0.5, sigma=None):
     chow_choose = 0
     pellet_choose = 0
 
@@ -59,14 +71,12 @@ def compute():
     for rat_num in range(6):
 
         # Each simulation consisted of 180 training
-        act(control_model,  p_pelet=P_PELET, n_pelet=N_PELET, n=180, kn=1, da=0.5, sigma=SIGMA)
-        act(depleted_model, p_pelet=P_PELET, n_pelet=N_PELET, n=180, kn=KN_BLOCK, da=0.5, sigma=SIGMA)
+        train(control_model,  p_pelet=P_PELET, n_pelet=N_PELET, n=180)
+        train(depleted_model, p_pelet=P_PELET, n_pelet=N_PELET, n=180)
 
         # 180 testing trials
-        ct_pellet, ct_chow = act(control_model,  p_pelet=P_PELET, sigma=SIGMA, n_pelet=N_PELET, n=180, kn=1,
-                                 da=0.5, train=False)
-        dp_pellet, dp_chow = act(depleted_model, p_pelet=P_PELET, sigma=SIGMA, n_pelet=N_PELET, n=180, kn=KN_BLOCK,
-                                 da=0.5, train=False)
+        ct_pellet, ct_chow = test(control_model,  p_pelet=P_PELET, sigma=SIGMA, n_pelet=N_PELET, n=180, kn=1, da=0.5)
+        dp_pellet, dp_chow = test(depleted_model, p_pelet=P_PELET, sigma=SIGMA, n_pelet=N_PELET, n=180, kn=KN_BLOCK, da=0.5)
 
         ct_pellets.append(ct_pellet)
         ct_chows.append(ct_chow)
@@ -94,5 +104,5 @@ if __name__ == '__main__':
 
     print()
     print("Pellet cost")
-    N_PELET = 14.510517
+    N_PELET = -14.510517
     compute()
