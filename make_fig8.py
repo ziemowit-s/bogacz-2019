@@ -190,10 +190,11 @@ if __name__ == '__main__':
 
     print("NO COST FOR PELLET:")
     print_results(avg0)
+    print()
     print("WITH COST FOR PELLET:")
     print_results(avg1)
 
-    plot_ax(ax0, avg0.reshape([2, 2]).T)
-    plot_ax(ax1, avg1.reshape([2, 2]).T)
+    plot_ax(ax0, avg0.reshape([2, 2]).T, title="B) Theory")
+    plot_ax(ax1, avg1.reshape([2, 2]).T, title="D) Theory")
 
     plt.show()

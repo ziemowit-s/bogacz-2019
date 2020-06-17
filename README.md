@@ -9,17 +9,22 @@ Recreate fig. 6 from the paper
 |                            |  Pellet | Chow |
 |----------------------------|:-------:|------|
 | **Control**                |         |      |
-| Replication                | 1.05    | 0.45 |
-| Fig 6                      | 1.0     | 0.4  |
+| replication                | 1.05    | 0.45 |
+| fig 6                      | 1.0     | 0.4  |
 | **D2R Depleted**           |         |      |
-| Replication                | -0.5704 | 0.45 |
-| Fig 6                      | -0.6    | 0.4  |
+| replication                | -0.5704 | 0.45 |
+| fig 6                      | -0.6    | 0.4  |
 
 ### make_fig8.py
 Recreate fig. 8 from the paper
 
 Replication of fig. 8:
+* B) Theory chart
+* D) Theory chart
+
 ![fig8](figures/fig8.png)
 
-Original fig. 8 from the paper:
+Original fig. 8 from the paper: 
+* Compare only charts: B) and D)
+
 ![fig8publication](figures/fig8_publication.png)

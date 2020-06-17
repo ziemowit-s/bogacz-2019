@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_stacked_bar(ax, data, series_labels, category_labels=None,
+def plot_stacked_bar(ax, data, series_labels, title=None, category_labels=None,
                      show_values=False, value_format="{}", y_label=None,
                      colors=None, reverse=False):
     """Plots a stacked bar chart with the data and labels provided.
@@ -50,6 +50,7 @@ def plot_stacked_bar(ax, data, series_labels, category_labels=None,
         ax.set_ylabel(y_label)
 
     ax.legend()
+    ax.set_title(title)
 
     if show_values:
         for axis in axes:
@@ -58,9 +59,9 @@ def plot_stacked_bar(ax, data, series_labels, category_labels=None,
                 ax.text(bar.get_x() + w/2, bar.get_y() + h/2, value_format.format(h), ha="center", va="center")
 
 
-def plot_ax(ax, data):
+def plot_ax(ax, data, title=None):
     series_labels = ['Pellets', 'Chow']
     category_labels = ['control', 'depleted']
 
     plot_stacked_bar(ax, data, series_labels, category_labels=category_labels, show_values=True, value_format="{:.1f}",
-                     colors=['tab:blue', 'tab:grey'], y_label="Choices [#]")
+                     colors=['tab:blue', 'tab:grey'], y_label="Choices [#]", title=title)
