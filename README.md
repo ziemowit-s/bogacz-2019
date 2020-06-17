@@ -28,4 +28,4 @@ Original fig. 8 from the paper:
 * B) Theory chart
 * D) Theory chart
 
-![fig8publication](figures/fig8_publication.png)
+![fig8publication](figures/fig8_publication_b_d.png)
