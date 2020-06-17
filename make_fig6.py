@@ -20,14 +20,19 @@ if __name__ == '__main__':
     chow_action._g = 0.9
     chow_action._n = 0.0
 
-    print("Control")
-    actions = model.act(state=0, kn=1, da=0.5, raw=True)
-    print("Computed:", "T[pellet]=%s" % round(actions[0], 4), "T[chow]=%s" % round(actions[1], 4))
-    print("Fig 6: T[pellet]=1.0 T[chow]=0.4")
+    control = model.act(state=0, kn=1, da=0.5, raw=True)
+    # κN = 0.7507, corresponding to blocking of D2 receptors with an efficiency ofroughly 25%
+    depleted = model.act(state=0, kn=0.7507, da=0.5, raw=True)
 
-    print()
-    # κN = 0.7507, corresponding to blocking ofD2 receptors with an efficiency ofroughly 25%
-    actions = model.act(state=0, kn=0.7507, da=0.5, raw=True)
-    print("DA Depleted")
-    print("Computed:", "T[pellet]=%s" % round(actions[0], 4), "T[chow]=%s" % round(actions[1], 4))
-    print("Fig 6: T[pellet]=-0.6 T[chow]=0.4")
+    txt = f"""
+    |                       |  Pellet | Chow |
+    |-----------------------|---------|------|
+    | Control               |         |      |
+    |   Replication         | {round(control[0], 4)}    | {round(control[1], 4)} |
+    |   Fig 6               | 1.0     | 0.4  |
+    | --------------------- | ------- | ---- |
+    | D2R Depleted          |         |      |
+    |   Replication         | {round(depleted[0], 4)} | {round(depleted[1], 4)} |
+    |   Fig 6               | -0.6    | 0.4  |
+    """
+    print(txt)
