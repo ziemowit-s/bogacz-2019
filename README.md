@@ -25,6 +25,7 @@ Replication of fig. 8:
 ![fig8](figures/fig8.png)
 
 Original fig. 8 from the paper: 
-* Compare only charts: B) and D)
+* B) Theory chart
+* D) Theory chart
 
 ![fig8publication](figures/fig8_publication.png)
