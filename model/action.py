@@ -16,10 +16,12 @@ class Action:
         self._n = n_init
 
     def g(self, delta):
-        self._g = self._alfa * self.f(delta) - self._lambd * self._g
+        delta_g = self._alfa * self.f(delta) - self._lambd * self._g
+        self._g += delta_g
 
     def n(self, delta):
-        self._n = self._alfa * self.f(-delta) - self._lambd * self._n
+        delta_n = self._alfa * self.f(-delta) - self._lambd * self._n
+        self._n += delta_n
 
     def delta(self, r):
         return r - 0.5 * (self._g - self._n)

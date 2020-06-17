@@ -19,6 +19,7 @@ def train(model, n, p_pelet, n_pelet, p_chow=1, n_chow=0):
         model.reward(reward=n_pelet, state=0, action=0)
         # pellet obtained - payoff
         model.reward(reward=p_pelet, state=0, action=0)
+
         # chow cost (default 0)
         model.reward(reward=n_chow, state=0, action=1)
         # chow payoff (default 1)
@@ -39,20 +40,18 @@ def test(model, n, p_pelet, n_pelet, p_chow=1, n_chow=0, kn: float = 1, da=0.5, 
         # pellet
         if t == 0:
             pellet_choose += 1
-            if train:
-                # lewer push - cost
-                model.reward(reward=n_pelet, state=0, action=0)
-                # pellet obtained - payoff
-                model.reward(reward=p_pelet, state=0, action=0)
+            # lewer push - cost
+            model.reward(reward=n_pelet, state=0, action=0)
+            # pellet obtained - payoff
+            model.reward(reward=p_pelet, state=0, action=0)
 
         # chow
         else:
             chow_choose += 1
-            if train:
-                # chow cost (default 0)
-                model.reward(reward=n_chow, state=0, action=1)
-                # chow payoff (default 1)
-                model.reward(reward=p_chow, state=0, action=1)
+            # chow cost (default 0)
+            model.reward(reward=n_chow, state=0, action=1)
+            # chow payoff (default 1)
+            model.reward(reward=p_chow, state=0, action=1)
 
     return pellet_choose, chow_choose
 
@@ -70,11 +69,11 @@ def compute():
     # 6 rats was simulated.
     for rat_num in range(6):
 
-        # Each simulation consisted of 180 training
+        # train
         train(control_model,  p_pelet=P_PELET, n_pelet=N_PELET, n=180)
         train(depleted_model, p_pelet=P_PELET, n_pelet=N_PELET, n=180)
 
-        # 180 testing trials
+        # test
         ct_pellet, ct_chow = test(control_model,  p_pelet=P_PELET, sigma=SIGMA, n_pelet=N_PELET, n=180, kn=1, da=0.5)
         dp_pellet, dp_chow = test(depleted_model, p_pelet=P_PELET, sigma=SIGMA, n_pelet=N_PELET, n=180, kn=KN_BLOCK, da=0.5)
 
