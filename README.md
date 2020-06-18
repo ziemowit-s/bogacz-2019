@@ -29,3 +29,10 @@ Original fig. 8 from the paper:
 * D) Theory chart
 
 ![fig8publication](figures/fig8_publication_b_d.png)
+
+Values of GO/NO-GO populations for a single run (single rat):
+* left column: no cost for obtaining the pellet
+* right column: with cost for obtaining the pellet
+* first row: go for pellet action
+* second row: go for chow action
+![go/no-go](figures/go-nogo-values.png)

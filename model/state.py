@@ -1,15 +1,17 @@
 import numpy as np
+from collections import namedtuple
 
 from model.action import Action
 
+ActionValue = namedtuple("ActionValue", "name g n")
 
 class State:
-    def __init__(self, num_of_actions: int = 1, alfa: float = 0.1,
-                 lambd: float = None, actor_only: bool = False, epsilon=0.1, g_init: float = 0, n_init: float = 0):
+    def __init__(self, num_of_actions: int = 1, alfa: float = 0.1, lambd: float = None, epsilon=0.1,
+                 g_init: float = 0, n_init: float = 0):
 
         self.actions = []
         for _ in range(num_of_actions):
-            a = Action(alfa=alfa, lambd=lambd, actor_only=actor_only, epsilon=epsilon, g_init=g_init, n_init=n_init)
+            a = Action(alfa=alfa, lambd=lambd, epsilon=epsilon, g_init=g_init, n_init=n_init)
             self.actions.append(a)
 
     def reward(self, reward, action: int = 0):
@@ -29,6 +31,14 @@ class State:
             return np.argmax(ts)
         else:
             return None
+
+    def get_values(self):
+        result = []
+        for i, a in enumerate(self.actions):
+            values = a.get_values()
+            a_val = ActionValue(name=i, g=values[0], n=values[1])
+            result.append(a_val)
+        return result
 
     def __repr__(self):
         return str(self.act())

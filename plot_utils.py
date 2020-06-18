@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+
 
 def plot_stacked_bar(ax, data, series_labels, title=None, category_labels=None,
                      show_values=False, value_format="{}", y_label=None,
@@ -39,7 +39,7 @@ def plot_stacked_bar(ax, data, series_labels, title=None, category_labels=None,
     for i, row_data in enumerate(data):
         color = colors[i] if colors is not None else None
         axes.append(ax.bar(ind, row_data, bottom=cum_size,
-                            label=series_labels[i], color=color))
+                           label=series_labels[i], color=color))
         cum_size += row_data
 
     if category_labels:
@@ -56,7 +56,7 @@ def plot_stacked_bar(ax, data, series_labels, title=None, category_labels=None,
         for axis in axes:
             for bar in axis:
                 w, h = bar.get_width(), bar.get_height()
-                ax.text(bar.get_x() + w/2, bar.get_y() + h/2, value_format.format(h), ha="center", va="center")
+                ax.text(bar.get_x() + w / 2, bar.get_y() + h / 2, value_format.format(h), ha="center", va="center")
 
 
 def plot_ax(ax, data, title=None):
