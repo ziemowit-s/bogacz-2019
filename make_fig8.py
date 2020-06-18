@@ -116,8 +116,17 @@ def test(model, n, p_pelet, n_pelet, p_chow=1, n_chow=0, kn: float = 1, da=0.5, 
     return pellet_choose, chow_choose, action_values
 
 
-def plot_rat_action_values(result_data, rat_num, title):
-    train = result_data[1][rat_num][0]
+def plot_action_values(action_values, rat_num, title):
+    """
+    Plot action values for each action. Action value consists of G and N values.
+    :param action_values: 
+        action_value obtained from compute() function (second element of the returned tuple)
+    :param rat_num: 
+        which rat number you want to plot
+    :param title: 
+        title of the graph
+    """
+    train = action_values[rat_num][0]
 
     fig, axes = plt.subplots(2, 1)
     ax0, ax1 = axes.flatten()
@@ -222,13 +231,13 @@ if __name__ == '__main__':
     r0 = compute(mouse_num=6, trials=180, p_pelet=P_PELET, n_pelet=0, p_chow=1, n_chow=0, kn_control=1,
                  kn_depleted=KN_DEPLETED, da_baseline=0.5, sigma=SIGMA)
     avg0 = r0[0]
-    plot_rat_action_values(result_data=r0, rat_num=0, title="No cost for obtaining the pellet")
+    plot_action_values(action_values=r0[1], rat_num=0, title="No cost for obtaining the pellet")
 
     # With cost for pellet
     r1 = compute(mouse_num=6, trials=180, p_pelet=P_PELET, n_pelet=N_PELET, p_chow=1, n_chow=0, kn_control=1,
                  kn_depleted=KN_DEPLETED, da_baseline=0.5, sigma=SIGMA)
     avg1 = r1[0]
-    plot_rat_action_values(result_data=r1, rat_num=0, title="With cost for obtaining the pellet")
+    plot_action_values(action_values=r1[1], rat_num=0, title="With cost for obtaining the pellet")
 
     print("NO COST FOR PELLET:")
     print_results(avg0)

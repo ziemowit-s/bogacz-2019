@@ -5,6 +5,7 @@ from model.action import Action
 
 ActionValue = namedtuple("ActionValue", "name g n")
 
+
 class State:
     def __init__(self, num_of_actions: int = 1, alfa: float = 0.1, lambd: float = None, epsilon=0.1,
                  g_init: float = 0, n_init: float = 0):
