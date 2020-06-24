@@ -3,7 +3,7 @@ In PLoS Computational Biology (Vol. 15, Issue 2). https://doi.org/10.1371/journa
 
 ## make_fig6.py
 
-#### Recreate fig. 6 from the paper
+#### Replication of fig. 6 from the paper
 
 |                            |  Pellet | Chow |
 |----------------------------|:-------:|------|
