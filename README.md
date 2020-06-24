@@ -23,7 +23,7 @@ In PLoS Computational Biology (Vol. 15, Issue 2). https://doi.org/10.1371/journa
   * Left: original (partial) fig. 8 from the paper
   * Right: replicated fig. 8
 
-#### Show GO/NO-GO values for different experimental conditions:
+#### GO/NO-GO values for different experimental conditions:
 
 ![go/no-go](figures/go-nogo-values.png)
 Values of GO/NO-GO populations for a single run (single rat):
